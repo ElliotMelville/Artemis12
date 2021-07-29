@@ -13,14 +13,39 @@ namespace Artemis12
 {
     public partial class Artemis : Form
     {
+        public Paddle leftPaddle;
+        public Paddle rightPaddle;
+        public Ball mainBall;
+        Graphics g;
         public Artemis()
         {
             InitializeComponent();
             //double buffering
             //stypeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, this, new object[] { true });
 
-            picPaddle2.Left = this.Width - picPaddle2.Width * 2;
-            ballMain.Start(picPaddle1, picPaddle2, this);
+            leftPaddle = new Paddle(0, 0);
+            rightPaddle = new Paddle(650, 0);
+            mainBall = new Ball(352, 255);
+
+            rightPaddle.x = this.Width - rightPaddle.width * 2;
+            mainBall.Start(leftPaddle, rightPaddle, this);
+
+            pnlGame.Invalidate();
+        }
+        private void pnlGame_Paint(object sender, PaintEventArgs e)
+        {
+            g = e.Graphics;
+            leftPaddle.Draw(g);
+            rightPaddle.Draw(g);
+            mainBall.Draw(g);
+        }
+        public int GetGameWidth()
+        {
+            return pnlGame.Width;
+        }
+        public int GetGameHeight()
+        {
+            return pnlGame.Height;
         }
 
         //PADDLE MOVEMENT (up/down)
@@ -34,26 +59,28 @@ namespace Artemis12
 
         private void tmrMovement_Tick(object sender, EventArgs e)
         {
-            ballMain.MoveBall();
+             mainBall.MoveBall();
 
-            if(paddle1Up == true && picPaddle1.Top > 0)
-            {
-                picPaddle1.Top -= defaultSpeed;
-            }
-            //the 40 is to account for the title bar height
-            if(paddle1Down == true && (picPaddle1.Top + picPaddle1.Height + 40) < this.Height)
-            {
-                picPaddle1.Top += defaultSpeed;
-            }
+             if(paddle1Up == true && leftPaddle.y > 0)
+             {
+                leftPaddle.y -= defaultSpeed;
+             }
+             //the 40 is to account for the title bar height
+             if(paddle1Down == true && (leftPaddle.y + leftPaddle.height + 40) < this.Height)
+             {
+                leftPaddle.y += defaultSpeed;
+             }
 
-            if (paddle2Up == true && picPaddle2.Top > 0)
-            {
-                picPaddle2.Top -= defaultSpeed;
-            }
-            if (paddle2Down == true && (picPaddle2.Top + picPaddle2.Height + 40) < this.Height)
-            {
-                picPaddle2.Top += defaultSpeed;
-            }
+             if (paddle2Up == true && rightPaddle.y > 0)
+             {
+                rightPaddle.y -= defaultSpeed;
+             }
+             if (paddle2Down == true && (rightPaddle.y + rightPaddle.height + 40) < this.Height)
+             {
+                rightPaddle.y += defaultSpeed;
+             }
+
+            pnlGame.Invalidate();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -99,5 +126,7 @@ namespace Artemis12
         {
             Console.WriteLine("lose!");
         }
+
+
     }
 }
