@@ -82,8 +82,24 @@ namespace Artemis12
         Artemis mainForm;
         Random random = new Random();
 
+        int speed = 7;
+        double angle;
+
         public void Start(Paddle paddleLeft, Paddle paddleRight, Artemis form)
         {
+            int angleDegrees = random.Next(-45, 46);
+            if(random.Next(0, 2) == 0)
+            {
+                //launch to right
+                angle = angleDegrees * Math.PI / 180;
+            }
+            else
+            {
+                //launch to left
+                angle = (angleDegrees + 180) * Math.PI / 180;
+            }
+
+
             //collect paddles and form
             leftPaddle = paddleLeft;
             rightPaddle = paddleRight;
@@ -107,8 +123,11 @@ namespace Artemis12
 
         public void MoveBall()
         {
-            int newX = x + xSpeed;
-            int newY = y + ySpeed;
+            double adjacent = Math.Cos(angle) * speed;
+            double opposite = Math.Sin(angle) * speed;
+
+            int newX = x + Convert.ToInt32(adjacent);
+            int newY = y + Convert.ToInt32(opposite);
             //if the ball hits the left or right wall
             if (newX < 0)
             {
@@ -119,9 +138,13 @@ namespace Artemis12
                 newX = HitRight(newX);
             }
 
-            if (newY < 0 || newY + height > mainForm.GetGameHeight())
+            if (newY < 0)
             {
-                ySpeed *= -1;
+                angle *= -1;
+            }
+            else if(newY + height > mainForm.GetGameHeight())
+            {
+                angle *= -1;
             }
 
             x = newX;
@@ -144,17 +167,7 @@ namespace Artemis12
 
             if (hitPaddle)
             {
-                if (y < leftPaddle.y && xSpeed > 0)
-                {
-                    ySpeed *= -1;
-                }
-                if (this.Bottom() > leftPaddle.Bottom() && xSpeed > 0)
-                {
-                    ySpeed *= -1;
-                }
-
-
-                xSpeed *= -1;
+                angle -= Math.PI + angle * 2;
                 //making sure the ball doesn't overlap with the paddle
                 if (newX < leftPaddle.Right())
                 {
@@ -165,8 +178,7 @@ namespace Artemis12
             {
                 //tell the main form that the game has been lost, and stop the ball from moving
                 mainForm.Loss(true);
-                xSpeed = 0;
-                ySpeed = 0;
+               speed = 0;
             }
 
             return newX;
@@ -186,7 +198,7 @@ namespace Artemis12
 
             if (hitPaddle)
             {
-                xSpeed *= -1;
+                angle += Math.PI - angle * 2;
                 //making sure the ball doesn't overlap with the paddle
                 if (newX - this.width < rightPaddle.x)
                 {
