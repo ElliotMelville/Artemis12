@@ -125,6 +125,7 @@ namespace Artemis12
         public void Loss(bool isLeft)
         {
             Console.WriteLine("lose!");
+            tmrMovement.Enabled = false;
         }
 
 
