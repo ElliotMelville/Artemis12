@@ -108,6 +108,7 @@ namespace Artemis12
         {
             height -= 30;
             y += 15;
+            SetPaddleRadius();
         }
     }
 
