@@ -50,7 +50,7 @@ namespace Artemis12
             x = _x;
             y = _y;
             width = 15;
-            height = 160;
+            height = 80;
             SetPaddleRadius();
         }
 
