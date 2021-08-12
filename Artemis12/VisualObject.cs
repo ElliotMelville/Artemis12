@@ -77,6 +77,13 @@ namespace Artemis12
 
             return bounceAngle;
         }
+
+        //GROW POWER
+        public void Grow()
+        {
+            height += 50;
+            y -= 25;
+        }
     }
 
     public class Ball : VisualObject
@@ -218,6 +225,58 @@ namespace Artemis12
             }
 
             return newX;
+        }
+
+        //GROW POWER
+        public void Grow()
+        {
+            width *= 2;
+            height *= 2;
+        }
+    }
+
+    public class Powerup : VisualObject
+    {
+
+        Random random = new Random();
+        List<string> Powers = new List<string>
+        {
+            "BallGrow", "PaddleGrow", "Cloud", "Duplicate"
+        };
+
+        public Image powerImage = Properties.Resources.test;
+        public Powerup(int _x, int _y)
+        {
+            x = _x;
+            y = _y;
+            width = 40;
+            height = 40;
+        }
+        public void Draw(Graphics g)
+        {
+            Rectangle powerRec = new Rectangle(x, y, width, height);
+            g.DrawImage(powerImage, powerRec);
+        }
+
+    }
+
+    public class Cloud : VisualObject
+    {
+        public Image paddleImage = Properties.Resources.test;
+
+        //constructor
+        public Cloud(int _x, int _y)
+        {
+            x = _x;
+            y = _y;
+            width = 15;
+            height = 160;
+        }
+
+        public void Draw(Graphics g)
+        {
+            Rectangle paddleRec = new Rectangle(x, y, width, height);
+            g.DrawImage(paddleImage, paddleRec);
         }
     }
 }
