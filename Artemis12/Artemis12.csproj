@@ -87,5 +87,20 @@
   <ItemGroup>
     <None Include="Resources\33_-_2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PaddleGrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PaddleShrink.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Comet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BallShrink.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BallGrow.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

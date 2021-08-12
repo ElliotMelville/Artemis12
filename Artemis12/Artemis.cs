@@ -16,6 +16,7 @@ namespace Artemis12
         public Paddle leftPaddle;
         public Paddle rightPaddle;
         public Ball mainBall;
+        public List<Powerup> powerups = new List<Powerup>();
         Graphics g;
         public Artemis()
         {
@@ -28,9 +29,11 @@ namespace Artemis12
             mainBall = new Ball(352, 255);
 
             rightPaddle.x = this.Width - rightPaddle.width * 2;
-            mainBall.Start(leftPaddle, rightPaddle, this);
+            mainBall.Start(leftPaddle, rightPaddle, this, powerups);
 
             pnlGame.Invalidate();
+
+            AddPowerup();
         }
         private void pnlGame_Paint(object sender, PaintEventArgs e)
         {
@@ -38,6 +41,10 @@ namespace Artemis12
             leftPaddle.Draw(g);
             rightPaddle.Draw(g);
             mainBall.Draw(g);
+            foreach(var power in powerups)
+            {
+                power.Draw(g);
+            }
         }
         public int GetGameWidth()
         {
@@ -55,7 +62,7 @@ namespace Artemis12
         bool paddle2Down = false;
 
         //SPEEDS (px/16ms)
-        const int defaultSpeed = 10;
+        public int defaultSpeed = 15;
 
         private void tmrMovement_Tick(object sender, EventArgs e)
         {
@@ -122,12 +129,56 @@ namespace Artemis12
             }
         }
 
+        public void AddPowerup()
+        {
+            Random random = new Random();
+            //number of power types
+            int randomType = random.Next(1, 7);
+            if (randomType == 1)
+            {
+                PaddleGrow power = new PaddleGrow(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                powerups.Add(power);
+            }
+            else if (randomType == 2)
+            {
+                PaddleShrink power = new PaddleShrink(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                powerups.Add(power);
+            }
+            else if (randomType == 3)
+            {
+                BallShrink power = new BallShrink(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                powerups.Add(power);
+            }
+            else if (randomType == 4)
+            {
+                BallGrow power = new BallGrow(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                powerups.Add(power);
+            }
+            else if (randomType == 5)
+            {
+                SpeedUp power = new SpeedUp(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                powerups.Add(power);
+            }
+            else if (randomType == 6)
+            {
+                SlowDown power = new SlowDown(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                powerups.Add(power);
+            }
+        }
+        public void RunPower(Powerup power)
+        {
+            power.Execute(leftPaddle, rightPaddle, mainBall, this);
+        }
+
         public void Loss(bool isLeft)
         {
             Console.WriteLine("lose!");
             tmrMovement.Enabled = false;
         }
 
-
+        private void tmrPowers_Tick(object sender, EventArgs e)
+        {
+            AddPowerup();
+        }
     }
 }

@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tmrMovement = new System.Windows.Forms.Timer(this.components);
             this.pnlGame = new System.Windows.Forms.Panel();
+            this.tmrPowers = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // tmrMovement
@@ -50,9 +51,11 @@
             this.pnlGame.TabIndex = 3;
             this.pnlGame.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGame_Paint);
             // 
-            // ballMain
+            // tmrPowers
             // 
-
+            this.tmrPowers.Enabled = true;
+            this.tmrPowers.Interval = 10000;
+            this.tmrPowers.Tick += new System.EventHandler(this.tmrPowers_Tick);
             // 
             // Artemis
             // 
@@ -71,6 +74,7 @@
         #endregion
         private System.Windows.Forms.Timer tmrMovement;
         private System.Windows.Forms.Panel pnlGame;
+        private System.Windows.Forms.Timer tmrPowers;
     }
 }
 

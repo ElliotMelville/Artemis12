@@ -32,9 +32,27 @@ namespace Artemis12
             return x + width;
         }
 
-        public void Draw(Graphics g)
+        public bool Intersects(VisualObject friend)
         {
-            
+            //collision detection (used with powerups)
+            if(this.x > friend.x && this.x < friend.Right() && this.y > friend.y && this.y < friend.Bottom())
+            {
+                return true;
+            }
+            if(this.Right() > friend.x && this.Right() < friend.Right() && this.y > friend.y && this.y < friend.Bottom())
+            {
+                return true;
+            }
+            if(this.x > friend.x && this.x < friend.Right() && this.Bottom() > friend.y && this.Bottom() < friend.Bottom())
+            {
+                return true;
+            }
+            if(this.Right() > friend.x && this.Right() < friend.Right() && this.Bottom() > friend.y && this.Bottom() < friend.Bottom())
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -49,8 +67,8 @@ namespace Artemis12
         {
             x = _x;
             y = _y;
-            width = 15;
-            height = 80;
+            width = 17;
+            height = 90;
             SetPaddleRadius();
         }
 
@@ -83,6 +101,13 @@ namespace Artemis12
         {
             height += 50;
             y -= 25;
+            SetPaddleRadius();
+        }
+        //SHRINK POWER
+        public void Shrink()
+        {
+            height -= 30;
+            y += 15;
         }
     }
 
@@ -106,12 +131,13 @@ namespace Artemis12
         Paddle leftPaddle;
         Paddle rightPaddle;
         Artemis mainForm;
+        List<Powerup> powerups;
         Random random = new Random();
 
         int speed = 9;
         double angle;
 
-        public void Start(Paddle paddleLeft, Paddle paddleRight, Artemis form)
+        public void Start(Paddle paddleLeft, Paddle paddleRight, Artemis form, List<Powerup> powerupsfromform)
         {
             int angleDegrees = random.Next(-45, 46);
             if(random.Next(0, 2) == 0)
@@ -129,6 +155,7 @@ namespace Artemis12
             leftPaddle = paddleLeft;
             rightPaddle = paddleRight;
             mainForm = form;
+            powerups = powerupsfromform;
 
             this.x = form.GetGameWidth() / 2 - width / 2;
             this.y = (form.GetGameHeight() / 2 - height / 2);
@@ -162,6 +189,23 @@ namespace Artemis12
 
             x = newX;
             y = newY;
+
+            //collision with powerups
+            CheckPowerups();
+
+        }
+        public void CheckPowerups()
+        {
+            foreach(var powerup in powerups)
+            {
+                if(this.Intersects(powerup) || powerup.Intersects(this))
+                {
+                    //collided!
+                    mainForm.RunPower(powerup);
+                    powerups.Remove(powerup);
+                    break;
+                }
+            }
         }
 
         private int HitLeft(int newX)
@@ -232,19 +276,24 @@ namespace Artemis12
         {
             width *= 2;
             height *= 2;
+            x -= width / 2;
+            y -= height / 2;
+        }
+        //SHRINK POWER
+        public void Shrink()
+        {
+            width /= 2;
+            height /= 2;
+            x += width / 2;
+            y += height / 2;
         }
     }
 
-    public class Powerup : VisualObject
+    public abstract class Powerup : VisualObject
     {
 
         Random random = new Random();
-        List<string> Powers = new List<string>
-        {
-            "BallGrow", "PaddleGrow", "Cloud", "Duplicate"
-        };
 
-        public Image powerImage = Properties.Resources.test;
         public Powerup(int _x, int _y)
         {
             x = _x;
@@ -255,10 +304,113 @@ namespace Artemis12
         public void Draw(Graphics g)
         {
             Rectangle powerRec = new Rectangle(x, y, width, height);
-            g.DrawImage(powerImage, powerRec);
+            g.DrawImage(GetImage(), powerRec);
         }
+        public abstract Image GetImage();
 
+        public abstract void Execute(Paddle left, Paddle right, Ball balls, Artemis mainForm);
     }
+    public class PaddleGrow : Powerup
+    {
+        public Image paddleGrowImage = Properties.Resources.PaddleGrow;
+        public override Image GetImage()
+        {
+            return paddleGrowImage;
+        }
+        public PaddleGrow(int _x, int _y):base(_x, _y)
+        {
+
+        }
+        public override void Execute(Paddle left, Paddle right, Ball balls, Artemis mainForm)
+        {
+            left.Grow();
+            right.Grow();
+        }
+    }
+    public class PaddleShrink : Powerup
+    {
+        public Image paddleGrowImage = Properties.Resources.PaddleShrink;
+        public override Image GetImage()
+        {
+            return paddleGrowImage;
+        }
+        public PaddleShrink(int _x, int _y) : base(_x, _y)
+        {
+
+        }
+        public override void Execute(Paddle left, Paddle right, Ball balls, Artemis mainForm)
+        {
+            left.Shrink();
+            right.Shrink();
+        }
+    }
+    public class BallGrow : Powerup
+    {
+        public Image ballGrowImage = Properties.Resources.BallShrink;
+        public override Image GetImage()
+        {
+            return ballGrowImage;
+        }
+        public BallGrow(int _x, int _y) : base(_x, _y)
+        {
+
+        }
+        public override void Execute(Paddle left, Paddle right, Ball ball, Artemis mainForm)
+        {
+            ball.Grow();
+        }
+    }
+    public class BallShrink : Powerup
+    {
+        public Image ballShrinkImage = Properties.Resources.BallGrow;
+        public override Image GetImage()
+        {
+            return ballShrinkImage;
+        }
+        public BallShrink(int _x, int _y) : base(_x, _y)
+        {
+
+        }
+        public override void Execute(Paddle left, Paddle right, Ball ball, Artemis mainForm)
+        {
+            ball.Shrink();
+        }
+    }
+    public class SpeedUp : Powerup
+    {
+        public Image speedUpImage = Properties.Resources.Comet;
+        public override Image GetImage()
+        {
+            return speedUpImage;
+        }
+        public SpeedUp(int _x, int _y) : base(_x, _y)
+        {
+
+        }
+        public override void Execute(Paddle left, Paddle right, Ball ball, Artemis mainForm)
+        {
+            mainForm.defaultSpeed += 5;
+        }
+    }
+    public class SlowDown : Powerup
+    {
+        public Image slowDownImage = Properties.Resources.Comet;
+        public override Image GetImage()
+        {
+            return slowDownImage;
+        }
+        public SlowDown(int _x, int _y) : base(_x, _y)
+        {
+
+        }
+        public override void Execute(Paddle left, Paddle right, Ball ball, Artemis mainForm)
+        {
+            mainForm.defaultSpeed -= 3;
+        }
+    }
+
+
+
 
     public class Cloud : VisualObject
     {
@@ -271,12 +423,6 @@ namespace Artemis12
             y = _y;
             width = 15;
             height = 160;
-        }
-
-        public void Draw(Graphics g)
-        {
-            Rectangle paddleRec = new Rectangle(x, y, width, height);
-            g.DrawImage(paddleImage, paddleRec);
         }
     }
 }
