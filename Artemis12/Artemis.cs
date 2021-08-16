@@ -257,6 +257,8 @@ namespace Artemis12
                 tmrSeconds.Enabled = false;
                 lblScore.Visible = true;
                 lblScore.Top -= 100;
+
+                powerups.Clear();
 ;            }
 
         }
