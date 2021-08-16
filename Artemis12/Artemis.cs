@@ -63,6 +63,8 @@ namespace Artemis12
             lblScore.Visible = true;
 
             lblScore.Top = 490;
+
+            score = 0;
         }
 
         private void pnlGame_Paint(object sender, PaintEventArgs e)
@@ -105,12 +107,10 @@ namespace Artemis12
             {
                 tempBalls.Add(ball);
             }
-            ////BBBBBBUUUUUUUUUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
             foreach (var ball in tempBalls)
             {
                 ball.MoveBall();
             }
-            //mainBall.MoveBall(balls);
             if(paddle1Up == true && leftPaddle.y > 0)
             {
             leftPaddle.y -= defaultSpeed;
