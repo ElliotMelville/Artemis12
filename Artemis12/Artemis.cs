@@ -39,6 +39,8 @@ namespace Artemis12
             pnlGame.BringToFront();
 
             rightPaddle.x = this.Width - rightPaddle.width * 2;
+            rightPaddle.y = pnlGame.Height / 2 - rightPaddle.height / 2;
+            leftPaddle.y = pnlGame.Height / 2 - leftPaddle.height / 2;
             mainBall.Start(leftPaddle, rightPaddle, this, powerups);
 
             pnlGame.Invalidate();
