@@ -35,19 +35,19 @@ namespace Artemis12
         public bool Intersects(VisualObject friend)
         {
             //collision detection (used with powerups)
-            if(this.x > friend.x && this.x < friend.Right() && this.y > friend.y && this.y < friend.Bottom())
+            if(this.x >= friend.x && this.x <= friend.Right() && this.y >= friend.y && this.y <= friend.Bottom())
             {
                 return true;
             }
-            if(this.Right() > friend.x && this.Right() < friend.Right() && this.y > friend.y && this.y < friend.Bottom())
+            if(this.Right() >= friend.x && this.Right() <= friend.Right() && this.y >= friend.y && this.y <= friend.Bottom())
             {
                 return true;
             }
-            if(this.x > friend.x && this.x < friend.Right() && this.Bottom() > friend.y && this.Bottom() < friend.Bottom())
+            if(this.x >= friend.x && this.x <= friend.Right() && this.Bottom() >= friend.y && this.Bottom() <= friend.Bottom())
             {
                 return true;
             }
-            if(this.Right() > friend.x && this.Right() < friend.Right() && this.Bottom() > friend.y && this.Bottom() < friend.Bottom())
+            if(this.Right() >= friend.x && this.Right() <= friend.Right() && this.Bottom() >= friend.y && this.Bottom() <= friend.Bottom())
             {
                 return true;
             }
@@ -212,16 +212,8 @@ namespace Artemis12
         {
             bool hitPaddle = false;
             //checking if the ball has hit the paddle
-            if (y + height / 2 < leftPaddle.Bottom() && y + height / 2 > leftPaddle.y)
-            {
-                hitPaddle = true;
-            }
-            else if (this.Bottom() < leftPaddle.Bottom() && this.Bottom() > leftPaddle.y)
-            {
-                hitPaddle = true;
-            }
 
-            if (hitPaddle)
+            if (Intersects(leftPaddle) || leftPaddle.Intersects(this))
             {
                 //making sure the ball doesn't overlap with the paddle
                 if (newX < leftPaddle.Right())
@@ -230,7 +222,7 @@ namespace Artemis12
                 }
                 angle = angle + 2*(leftPaddle.GetBounceAngle(y + height / 2) - Math.PI/2 - angle);
             }
-            else
+            else if (newX <= 0)
             {
                 //tell the main form that the game has been lost, and stop the ball from moving
                 mainForm.Loss(true);
@@ -243,25 +235,17 @@ namespace Artemis12
         {
             bool hitPaddle = false;
             //checking if the ball has hit the paddle
-            if (y + height / 2 < rightPaddle.Bottom() && y + height / 2 > rightPaddle.y)
-            {
-                hitPaddle = true;
-            }
-            else if (this.Bottom() < leftPaddle.Bottom() && this.Bottom() > leftPaddle.y)
-            {
-                hitPaddle = true;
-            }
-
-            if (hitPaddle)
+            if (Intersects(rightPaddle) || rightPaddle.Intersects(this))
             {
                 //making sure the ball doesn't overlap with the paddle
-                if (this.Right() > rightPaddle.x)
+                if (this.Right() >= rightPaddle.x)
                 {
                     newX = rightPaddle.x - this.width;
                 }
-                angle = angle - 2*(rightPaddle.GetBounceAngle(y + height / 2) + Math.PI/2 - angle);
+                //angle = angle - 2*(rightPaddle.GetBounceAngle(y + height / 2) + Math.PI/2 - angle);
+                angle = angle - 2*(rightPaddle.GetBounceAngle(y + height / 2) - Math.PI/2 + angle);
             }
-            else
+            else if (newX >= mainForm.Width - width)
             {
                 //tell the main form that the game has been lost, and stop the ball from moving
                 mainForm.Loss(false);
@@ -274,16 +258,16 @@ namespace Artemis12
         //GROW POWER
         public void Grow()
         {
-            width *= 2;
-            height *= 2;
+            width += 5;
+            height += 5;
             x -= width / 2;
             y -= height / 2;
         }
         //SHRINK POWER
         public void Shrink()
         {
-            width /= 2;
-            height /= 2;
+            width -= 5;
+            height -= 5;
             x += width / 2;
             y += height / 2;
         }
