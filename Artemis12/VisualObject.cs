@@ -151,7 +151,7 @@ namespace Artemis12
                 //launch to left
                 angle = (angleDegrees + 180) * Math.PI / 180;
             }
-
+            angle = FixAngle(angle);
             //collect paddles and form
             leftPaddle = paddleLeft;
             rightPaddle = paddleRight;
@@ -179,10 +179,12 @@ namespace Artemis12
             if (newY < 0)
             {
                 angle *= -1;
+                angle = FixAngle(angle);
             }
             else if(newY + height > mainForm.GetGameHeight())
             {
                 angle *= -1;
+                angle = FixAngle(angle);
             }
 
             x = newX;
