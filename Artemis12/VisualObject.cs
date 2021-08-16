@@ -215,7 +215,7 @@ namespace Artemis12
                 }
                 else
                 {
-                    angle -= Math.PI / 2;
+                    angle -= Math.PI * 2;
                 }
             }
             return angle;
