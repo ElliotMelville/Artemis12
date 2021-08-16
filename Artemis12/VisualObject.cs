@@ -398,7 +398,23 @@ namespace Artemis12
         }
         public override void Execute(Paddle left, Paddle right, Ball ball, Artemis mainForm)
         {
-            mainForm.AddBall(ball);
+            mainForm.AddBall(ball, 1);
+        }
+    }
+    public class MultiBall : Powerup
+    {
+        public Image multiBallImage = Properties.Resources.Multiball;
+        public override Image GetImage()
+        {
+            return multiBallImage;
+        }
+        public MultiBall(int _x, int _y) : base(_x, _y)
+        {
+
+        }
+        public override void Execute(Paddle left, Paddle right, Ball ball, Artemis mainForm)
+        {
+            mainForm.AddBall(ball, 4);
         }
     }
 

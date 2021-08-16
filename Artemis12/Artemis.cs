@@ -176,8 +176,7 @@ namespace Artemis12
         {
             Random random = new Random();
             //number of power types
-            int randomType = random.Next(1, 6);
-            randomType = 5;
+            int randomType = random.Next(1, 9);
             if (randomType == 1)
             {
                 PaddleGrow power = new PaddleGrow(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
@@ -199,6 +198,11 @@ namespace Artemis12
                 powerups.Add(power);
             }
             else if (randomType == 5)
+            {
+                MultiBall power = new MultiBall(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
+                powerups.Add(power);
+            }
+            else if (randomType > 5)
             {
                 BallDuplicate power = new BallDuplicate(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
                 powerups.Add(power);
@@ -262,11 +266,18 @@ namespace Artemis12
             AddPowerup();
         }
 
-        public void AddBall(Ball parentBall)
+        public void AddBall(Ball parentBall, int count)
         {
-            Ball newBall = new Ball(parentBall.x, parentBall.y);
-            newBall.Start(leftPaddle, rightPaddle, this, powerups);
-            balls.Add(newBall);
+            int i = 0;
+            while(i < count)
+            {
+                Ball newBall = new Ball(parentBall.x, parentBall.y);
+                newBall.Start(leftPaddle, rightPaddle, this, powerups);
+                balls.Add(newBall);
+
+                i++;
+            }
+
         }
 
         private void btnHelp_Click(object sender, EventArgs e)

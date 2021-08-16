@@ -173,6 +173,16 @@ namespace Artemis12.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Multiball {
+            get {
+                object obj = ResourceManager.GetObject("Multiball", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PaddleGrow {
             get {
                 object obj = ResourceManager.GetObject("PaddleGrow", resourceCulture);
