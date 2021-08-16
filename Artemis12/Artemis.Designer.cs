@@ -32,11 +32,12 @@
             this.tmrMovement = new System.Windows.Forms.Timer(this.components);
             this.pnlGame = new System.Windows.Forms.Panel();
             this.tmrPowers = new System.Windows.Forms.Timer(this.components);
+            this.btnStart = new System.Windows.Forms.Button();
+            this.pnlGame.SuspendLayout();
             this.SuspendLayout();
             // 
             // tmrMovement
             // 
-            this.tmrMovement.Enabled = true;
             this.tmrMovement.Interval = 16;
             this.tmrMovement.Tick += new System.EventHandler(this.tmrMovement_Tick);
             // 
@@ -45,6 +46,7 @@
             this.pnlGame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlGame.Controls.Add(this.btnStart);
             this.pnlGame.Location = new System.Drawing.Point(0, 0);
             this.pnlGame.Name = "pnlGame";
             this.pnlGame.Size = new System.Drawing.Size(784, 550);
@@ -53,9 +55,18 @@
             // 
             // tmrPowers
             // 
-            this.tmrPowers.Enabled = true;
             this.tmrPowers.Interval = 10000;
             this.tmrPowers.Tick += new System.EventHandler(this.tmrPowers_Tick);
+            // 
+            // btnStart
+            // 
+            this.btnStart.Location = new System.Drawing.Point(316, 225);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(152, 86);
+            this.btnStart.TabIndex = 0;
+            this.btnStart.Text = "START";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // Artemis
             // 
@@ -67,6 +78,7 @@
             this.Text = "Form1";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.pnlGame.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -75,6 +87,7 @@
         private System.Windows.Forms.Timer tmrMovement;
         private System.Windows.Forms.Panel pnlGame;
         private System.Windows.Forms.Timer tmrPowers;
+        private System.Windows.Forms.Button btnStart;
     }
 }
 

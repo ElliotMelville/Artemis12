@@ -16,31 +16,44 @@ namespace Artemis12
         public Paddle leftPaddle;
         public Paddle rightPaddle;
         public Ball mainBall;
+        public List<Ball> balls = new List<Ball>();
         public List<Powerup> powerups = new List<Powerup>();
         Graphics g;
         public Artemis()
         {
             InitializeComponent();
             //double buffering
-            //stypeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, this, new object[] { true });
-
+            typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, pnlGame, new object[] { true });
             leftPaddle = new Paddle(0, 0);
             rightPaddle = new Paddle(650, 0);
             mainBall = new Ball(352, 255);
-
+        }
+        private void btnStart_Click(object sender, EventArgs e)
+        {
             rightPaddle.x = this.Width - rightPaddle.width * 2;
             mainBall.Start(leftPaddle, rightPaddle, this, powerups);
 
             pnlGame.Invalidate();
 
             AddPowerup();
+
+            balls.Add(mainBall);
+
+            tmrMovement.Enabled = true;
+            tmrPowers.Enabled = true;
+            btnStart.Visible = false;
         }
+
         private void pnlGame_Paint(object sender, PaintEventArgs e)
         {
             g = e.Graphics;
             leftPaddle.Draw(g);
             rightPaddle.Draw(g);
-            mainBall.Draw(g);
+            //mainBall.Draw(g);
+            foreach (var ball in balls)
+            {
+                ball.Draw(g);
+            }
             foreach(var power in powerups)
             {
                 power.Draw(g);
@@ -66,26 +79,30 @@ namespace Artemis12
 
         private void tmrMovement_Tick(object sender, EventArgs e)
         {
-             mainBall.MoveBall();
+            ////BBBBBBUUUUUUUUUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+            /*foreach (var ball in balls)
+            {
+                ball.MoveBall(balls);
+            }*/
+            mainBall.MoveBall(balls);
+            if(paddle1Up == true && leftPaddle.y > 0)
+            {
+            leftPaddle.y -= defaultSpeed;
+            }
+            //the 40 is to account for the title bar height
+            if(paddle1Down == true && (leftPaddle.y + leftPaddle.height + 40) < this.Height)
+            {
+            leftPaddle.y += defaultSpeed;
+            }
 
-             if(paddle1Up == true && leftPaddle.y > 0)
-             {
-                leftPaddle.y -= defaultSpeed;
-             }
-             //the 40 is to account for the title bar height
-             if(paddle1Down == true && (leftPaddle.y + leftPaddle.height + 40) < this.Height)
-             {
-                leftPaddle.y += defaultSpeed;
-             }
-
-             if (paddle2Up == true && rightPaddle.y > 0)
-             {
-                rightPaddle.y -= defaultSpeed;
-             }
-             if (paddle2Down == true && (rightPaddle.y + rightPaddle.height + 40) < this.Height)
-             {
-                rightPaddle.y += defaultSpeed;
-             }
+            if (paddle2Up == true && rightPaddle.y > 0)
+            {
+            rightPaddle.y -= defaultSpeed;
+            }
+            if (paddle2Down == true && (rightPaddle.y + rightPaddle.height + 40) < this.Height)
+            {
+            rightPaddle.y += defaultSpeed;
+            }
 
             pnlGame.Invalidate();
         }
@@ -133,35 +150,31 @@ namespace Artemis12
         {
             Random random = new Random();
             //number of power types
-            int randomType = random.Next(1, 7);
+            int randomType = random.Next(1, 6);
+            randomType = 5;
             if (randomType == 1)
             {
-                PaddleGrow power = new PaddleGrow(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                PaddleGrow power = new PaddleGrow(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
                 powerups.Add(power);
             }
             else if (randomType == 2)
             {
-                PaddleShrink power = new PaddleShrink(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                PaddleShrink power = new PaddleShrink(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
                 powerups.Add(power);
             }
             else if (randomType == 3)
             {
-                BallShrink power = new BallShrink(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                BallShrink power = new BallShrink(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
                 powerups.Add(power);
             }
             else if (randomType == 4)
             {
-                BallGrow power = new BallGrow(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                BallGrow power = new BallGrow(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
                 powerups.Add(power);
             }
             else if (randomType == 5)
             {
-                SpeedUp power = new SpeedUp(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
-                powerups.Add(power);
-            }
-            else if (randomType == 6)
-            {
-                SlowDown power = new SlowDown(random.Next(0, this.Width - 40), random.Next(0, this.Height - 40));
+                BallDuplicate power = new BallDuplicate(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
                 powerups.Add(power);
             }
         }
@@ -180,5 +193,14 @@ namespace Artemis12
         {
             AddPowerup();
         }
+
+        public void AddBall(Ball parentBall)
+        {
+            Ball newBall = new Ball(parentBall.x, parentBall.y);
+            newBall.Start(leftPaddle, rightPaddle, this, powerups);
+            balls.Add(newBall);
+        }
+
+
     }
 }
