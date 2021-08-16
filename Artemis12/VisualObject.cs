@@ -162,7 +162,7 @@ namespace Artemis12
             this.y = (form.GetGameHeight() / 2 - height / 2);
         }
 
-        public void MoveBall()
+        public void MoveBall(List<Ball> balls)
         {
             double adjacent = Math.Cos(angle) * speed;
             double opposite = Math.Sin(angle) * speed;
@@ -172,11 +172,11 @@ namespace Artemis12
             //if the ball hits the left or right wall
             if (newX < leftPaddle.x + leftPaddle.width)
             {
-                newX = HitLeft(newX);
+                newX = HitLeft(newX, balls);
             }
             else if (newX + width > rightPaddle.x)
             {
-                newX = HitRight(newX);
+                newX = HitRight(newX, balls);
             }
 
             if (newY < 0)
@@ -209,7 +209,7 @@ namespace Artemis12
             }
         }
 
-        private int HitLeft(int newX)
+        private int HitLeft(int newX, List<Ball> balls)
         {
             bool hitPaddle = false;
             //checking if the ball has hit the paddle
@@ -233,14 +233,17 @@ namespace Artemis12
             }
             else
             {
-                //tell the main form that the game has been lost, and stop the ball from moving
-                mainForm.Loss(true);
-               speed = 0;
+                balls.Remove(this);
+                if(balls.Count == 0)
+                {
+                    //tell the main form that the game has been lost, and stop the ball from moving
+                    mainForm.Loss(true);
+                }
             }
 
             return newX;
         }
-        private int HitRight(int newX)
+        private int HitRight(int newX, List<Ball> balls)
         {
             bool hitPaddle = false;
             //checking if the ball has hit the paddle
@@ -377,41 +380,22 @@ namespace Artemis12
             ball.Shrink();
         }
     }
-    public class SpeedUp : Powerup
+    public class BallDuplicate : Powerup
     {
-        public Image speedUpImage = Properties.Resources.Comet;
+        public Image ballDupeImage = Properties.Resources.BallGrow;
         public override Image GetImage()
         {
-            return speedUpImage;
+            return ballDupeImage;
         }
-        public SpeedUp(int _x, int _y) : base(_x, _y)
+        public BallDuplicate(int _x, int _y) : base(_x, _y)
         {
 
         }
         public override void Execute(Paddle left, Paddle right, Ball ball, Artemis mainForm)
         {
-            mainForm.defaultSpeed += 5;
+            mainForm.AddBall(ball);
         }
     }
-    public class SlowDown : Powerup
-    {
-        public Image slowDownImage = Properties.Resources.Comet;
-        public override Image GetImage()
-        {
-            return slowDownImage;
-        }
-        public SlowDown(int _x, int _y) : base(_x, _y)
-        {
-
-        }
-        public override void Execute(Paddle left, Paddle right, Ball ball, Artemis mainForm)
-        {
-            mainForm.defaultSpeed -= 3;
-        }
-    }
-
-
-
 
     public class Cloud : VisualObject
     {
