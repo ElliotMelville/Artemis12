@@ -157,12 +157,9 @@ namespace Artemis12
             rightPaddle = paddleRight;
             mainForm = form;
             powerups = powerupsfromform;
-
-            this.x = form.GetGameWidth() / 2 - width / 2;
-            this.y = (form.GetGameHeight() / 2 - height / 2);
         }
 
-        public void MoveBall(List<Ball> balls)
+        public void MoveBall()
         {
             double adjacent = Math.Cos(angle) * speed;
             double opposite = Math.Sin(angle) * speed;
@@ -172,11 +169,11 @@ namespace Artemis12
             //if the ball hits the left or right wall
             if (newX < leftPaddle.x + leftPaddle.width)
             {
-                newX = HitLeft(newX, balls);
+                newX = HitLeft(newX);
             }
             else if (newX + width > rightPaddle.x)
             {
-                newX = HitRight(newX, balls);
+                newX = HitRight(newX);
             }
 
             if (newY < 0)
@@ -202,16 +199,29 @@ namespace Artemis12
                 if(this.Intersects(powerup) || powerup.Intersects(this))
                 {
                     //collided!
-                    mainForm.RunPower(powerup);
+                    mainForm.RunPower(powerup, this);
                     powerups.Remove(powerup);
                     break;
                 }
             }
         }
-
-        private int HitLeft(int newX, List<Ball> balls)
+        private double FixAngle(double angle)
         {
-            bool hitPaddle = false;
+            while(angle < 0 || angle > 2 * Math.PI)
+            {
+                if(angle < 0)
+                {
+                    angle += Math.PI * 2;
+                }
+                else
+                {
+                    angle -= Math.PI / 2;
+                }
+            }
+            return angle;
+        }
+        private int HitLeft(int newX)
+        {
             //checking if the ball has hit the paddle
 
             if (Intersects(leftPaddle) || leftPaddle.Intersects(this))
@@ -222,6 +232,16 @@ namespace Artemis12
                     newX = leftPaddle.Right();
                 }
                 angle = angle + 2*(leftPaddle.GetBounceAngle(y + height / 2) - Math.PI/2 - angle);
+                angle = FixAngle(angle);
+                if (angle <= Math.PI && angle >= Math.PI / 2 - (15 * Math.PI / 180))
+                {
+                    angle = Math.PI / 2 - (15 * Math.PI / 180);
+                }
+                else if (angle >= Math.PI && angle <= 1.5*Math.PI/2 + (15 * Math.PI / 180))
+                {
+                    angle = 1.5 * Math.PI / 2 + (15 * Math.PI / 180);
+                }
+
             }
             else if (newX <= 0)
             {
@@ -230,9 +250,8 @@ namespace Artemis12
 
             return newX;
         }
-        private int HitRight(int newX, List<Ball> balls)
+        private int HitRight(int newX)
         {
-            bool hitPaddle = false;
             //checking if the ball has hit the paddle
             if (Intersects(rightPaddle) || rightPaddle.Intersects(this))
             {
@@ -243,6 +262,15 @@ namespace Artemis12
                 }
                 //angle = angle - 2*(rightPaddle.GetBounceAngle(y + height / 2) + Math.PI/2 - angle);
                 angle = angle - 2*(rightPaddle.GetBounceAngle(y + height / 2) - Math.PI/2 + angle);
+                angle = FixAngle(angle);
+                if (angle >= Math.PI / 2 && angle <= Math.PI / 2 + (15 * Math.PI / 180))
+                {
+                    angle = Math.PI / 2 + (15 * Math.PI / 180);
+                }
+                else if (angle <= 1.5 * Math.PI && angle >= 1.5 * Math.PI / 2 - (15 * Math.PI / 180))
+                {
+                    angle = 1.5 * Math.PI / 2 - (15 * Math.PI / 180);
+                }
             }
             else if (newX >= mainForm.Width - width)
             {
@@ -359,7 +387,7 @@ namespace Artemis12
     }
     public class BallDuplicate : Powerup
     {
-        public Image ballDupeImage = Properties.Resources.BallGrow;
+        public Image ballDupeImage = Properties.Resources.BallClone;
         public override Image GetImage()
         {
             return ballDupeImage;

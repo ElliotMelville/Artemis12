@@ -31,24 +31,22 @@
             this.components = new System.ComponentModel.Container();
             this.tmrMovement = new System.Windows.Forms.Timer(this.components);
             this.pnlGame = new System.Windows.Forms.Panel();
+            this.picGameOver = new System.Windows.Forms.PictureBox();
             this.btnBack = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
             this.btnStory = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
-            this.tmrPowers = new System.Windows.Forms.Timer(this.components);
-            this.tmrSeconds = new System.Windows.Forms.Timer(this.components);
-            this.lblScore = new System.Windows.Forms.Label();
-            this.picGameOver = new System.Windows.Forms.PictureBox();
             this.picHome = new System.Windows.Forms.PictureBox();
             this.picHelp = new System.Windows.Forms.PictureBox();
             this.picStory = new System.Windows.Forms.PictureBox();
-            this.picBackground = new System.Windows.Forms.PictureBox();
+            this.lblScore = new System.Windows.Forms.Label();
+            this.tmrPowers = new System.Windows.Forms.Timer(this.components);
+            this.tmrSeconds = new System.Windows.Forms.Timer(this.components);
             this.pnlGame.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picGameOver)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picHome)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picStory)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
             this.SuspendLayout();
             // 
             // tmrMovement
@@ -61,7 +59,8 @@
             this.pnlGame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlGame.Controls.Add(this.picGameOver);
+            this.pnlGame.BackColor = System.Drawing.Color.Transparent;
+            this.pnlGame.BackgroundImage = global::Artemis12.Properties.Resources.ArtemisBackground;
             this.pnlGame.Controls.Add(this.btnBack);
             this.pnlGame.Controls.Add(this.btnHelp);
             this.pnlGame.Controls.Add(this.btnStory);
@@ -69,13 +68,23 @@
             this.pnlGame.Controls.Add(this.picHome);
             this.pnlGame.Controls.Add(this.picHelp);
             this.pnlGame.Controls.Add(this.picStory);
-            this.pnlGame.Controls.Add(this.picBackground);
             this.pnlGame.Controls.Add(this.lblScore);
+            this.pnlGame.Controls.Add(this.picGameOver);
+            this.pnlGame.ForeColor = System.Drawing.Color.Transparent;
             this.pnlGame.Location = new System.Drawing.Point(0, 0);
             this.pnlGame.Name = "pnlGame";
             this.pnlGame.Size = new System.Drawing.Size(784, 550);
             this.pnlGame.TabIndex = 3;
             this.pnlGame.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGame_Paint);
+            // 
+            // picGameOver
+            // 
+            this.picGameOver.Image = global::Artemis12.Properties.Resources.ArtemisGameOver1;
+            this.picGameOver.Location = new System.Drawing.Point(0, 0);
+            this.picGameOver.Name = "picGameOver";
+            this.picGameOver.Size = new System.Drawing.Size(784, 550);
+            this.picGameOver.TabIndex = 9;
+            this.picGameOver.TabStop = false;
             // 
             // btnBack
             // 
@@ -121,37 +130,6 @@
             this.btnStart.UseVisualStyleBackColor = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
-            // tmrPowers
-            // 
-            this.tmrPowers.Interval = 10000;
-            this.tmrPowers.Tick += new System.EventHandler(this.tmrPowers_Tick);
-            // 
-            // tmrSeconds
-            // 
-            this.tmrSeconds.Interval = 1000;
-            this.tmrSeconds.Tick += new System.EventHandler(this.tmrSeconds_Tick);
-            // 
-            // lblScore
-            // 
-            this.lblScore.BackColor = System.Drawing.Color.Black;
-            this.lblScore.Font = new System.Drawing.Font("MS PGothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblScore.ForeColor = System.Drawing.Color.LimeGreen;
-            this.lblScore.Location = new System.Drawing.Point(232, 490);
-            this.lblScore.Name = "lblScore";
-            this.lblScore.Size = new System.Drawing.Size(330, 39);
-            this.lblScore.TabIndex = 8;
-            this.lblScore.Text = "SCORE: 0";
-            this.lblScore.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // picGameOver
-            // 
-            this.picGameOver.Image = global::Artemis12.Properties.Resources.ArtemisGameOver1;
-            this.picGameOver.Location = new System.Drawing.Point(0, 0);
-            this.picGameOver.Name = "picGameOver";
-            this.picGameOver.Size = new System.Drawing.Size(784, 550);
-            this.picGameOver.TabIndex = 9;
-            this.picGameOver.TabStop = false;
-            // 
             // picHome
             // 
             this.picHome.Image = global::Artemis12.Properties.Resources.ArtemisHome;
@@ -179,14 +157,27 @@
             this.picStory.TabIndex = 6;
             this.picStory.TabStop = false;
             // 
-            // picBackground
+            // lblScore
             // 
-            this.picBackground.Image = global::Artemis12.Properties.Resources.ArtemisBackground;
-            this.picBackground.Location = new System.Drawing.Point(0, 0);
-            this.picBackground.Name = "picBackground";
-            this.picBackground.Size = new System.Drawing.Size(784, 550);
-            this.picBackground.TabIndex = 7;
-            this.picBackground.TabStop = false;
+            this.lblScore.BackColor = System.Drawing.Color.Black;
+            this.lblScore.Font = new System.Drawing.Font("MS PGothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblScore.ForeColor = System.Drawing.Color.LimeGreen;
+            this.lblScore.Location = new System.Drawing.Point(232, 490);
+            this.lblScore.Name = "lblScore";
+            this.lblScore.Size = new System.Drawing.Size(330, 39);
+            this.lblScore.TabIndex = 8;
+            this.lblScore.Text = "SCORE: 0";
+            this.lblScore.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tmrPowers
+            // 
+            this.tmrPowers.Interval = 10000;
+            this.tmrPowers.Tick += new System.EventHandler(this.tmrPowers_Tick);
+            // 
+            // tmrSeconds
+            // 
+            this.tmrSeconds.Interval = 1000;
+            this.tmrSeconds.Tick += new System.EventHandler(this.tmrSeconds_Tick);
             // 
             // Artemis
             // 
@@ -203,7 +194,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.picHome)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picStory)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBackground)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -219,7 +209,6 @@
         private System.Windows.Forms.PictureBox picHelp;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.PictureBox picStory;
-        private System.Windows.Forms.PictureBox picBackground;
         private System.Windows.Forms.Timer tmrSeconds;
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.PictureBox picGameOver;

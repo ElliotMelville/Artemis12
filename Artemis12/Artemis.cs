@@ -30,13 +30,14 @@ namespace Artemis12
             mainBall = new Ball(352, 255);
             picHelp.Visible = false;
             picStory.Visible = false;
-            picBackground.Visible = false;
             btnBack.Visible = false;
             lblScore.Visible = false;
             picGameOver.Visible = false;
         }
         private void btnStart_Click(object sender, EventArgs e)
         {
+            pnlGame.BringToFront();
+
             rightPaddle.x = this.Width - rightPaddle.width * 2;
             mainBall.Start(leftPaddle, rightPaddle, this, powerups);
 
@@ -56,12 +57,12 @@ namespace Artemis12
             btnStory.Enabled = false;
             picHome.Visible = false;
             btnBack.Enabled = false;
-
-            //picBackground.Visible = true;
-            //picBackground.SendToBack();
+            picGameOver.Visible = false;
 
             tmrSeconds.Enabled = true;
             lblScore.Visible = true;
+
+            lblScore.Top = 490;
         }
 
         private void pnlGame_Paint(object sender, PaintEventArgs e)
@@ -100,13 +101,16 @@ namespace Artemis12
         private void tmrMovement_Tick(object sender, EventArgs e)
         {
             List<Ball> tempBalls = new List<Ball>();
-            tempBalls = balls;
+            foreach(var ball in balls)
+            {
+                tempBalls.Add(ball);
+            }
             ////BBBBBBUUUUUUUUUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-            //foreach (var ball in balls)
-            //{
-            //    ball.MoveBall(tempBalls);
-            //}
-            mainBall.MoveBall(balls);
+            foreach (var ball in tempBalls)
+            {
+                ball.MoveBall();
+            }
+            //mainBall.MoveBall(balls);
             if(paddle1Up == true && leftPaddle.y > 0)
             {
             leftPaddle.y -= defaultSpeed;
@@ -173,7 +177,7 @@ namespace Artemis12
             Random random = new Random();
             //number of power types
             int randomType = random.Next(1, 6);
-            //randomType = 5;
+            randomType = 5;
             if (randomType == 1)
             {
                 PaddleGrow power = new PaddleGrow(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
@@ -200,9 +204,9 @@ namespace Artemis12
                 powerups.Add(power);
             }
         }
-        public void RunPower(Powerup power)
+        public void RunPower(Powerup power, Ball ball)
         {
-            power.Execute(leftPaddle, rightPaddle, mainBall, this);
+            power.Execute(leftPaddle, rightPaddle, ball, this);
         }
 
         public void BallOut(Ball ball)
@@ -242,7 +246,6 @@ namespace Artemis12
                 mainBall = new Ball(352, 255);
                 picHelp.Visible = false;
                 picStory.Visible = false;
-                picBackground.Visible = false;
                 btnBack.Visible = false;
 
 
