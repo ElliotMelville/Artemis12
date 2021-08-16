@@ -19,6 +19,7 @@ namespace Artemis12
         public List<Ball> balls = new List<Ball>();
         public List<Powerup> powerups = new List<Powerup>();
         Graphics g;
+        int score = 0;
         public Artemis()
         {
             InitializeComponent();
@@ -27,6 +28,12 @@ namespace Artemis12
             leftPaddle = new Paddle(0, 0);
             rightPaddle = new Paddle(650, 0);
             mainBall = new Ball(352, 255);
+            picHelp.Visible = false;
+            picStory.Visible = false;
+            picBackground.Visible = false;
+            btnBack.Visible = false;
+            lblScore.Visible = false;
+            picGameOver.Visible = false;
         }
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -42,6 +49,19 @@ namespace Artemis12
             tmrMovement.Enabled = true;
             tmrPowers.Enabled = true;
             btnStart.Visible = false;
+            btnStart.Enabled = false;
+            btnHelp.Visible = false;
+            btnHelp.Enabled = false;
+            btnStory.Visible = false;
+            btnStory.Enabled = false;
+            picHome.Visible = false;
+            btnBack.Enabled = false;
+
+            //picBackground.Visible = true;
+            //picBackground.SendToBack();
+
+            tmrSeconds.Enabled = true;
+            lblScore.Visible = true;
         }
 
         private void pnlGame_Paint(object sender, PaintEventArgs e)
@@ -79,11 +99,13 @@ namespace Artemis12
 
         private void tmrMovement_Tick(object sender, EventArgs e)
         {
+            List<Ball> tempBalls = new List<Ball>();
+            tempBalls = balls;
             ////BBBBBBUUUUUUUUUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-            /*foreach (var ball in balls)
-            {
-                ball.MoveBall(balls);
-            }*/
+            //foreach (var ball in balls)
+            //{
+            //    ball.MoveBall(tempBalls);
+            //}
             mainBall.MoveBall(balls);
             if(paddle1Up == true && leftPaddle.y > 0)
             {
@@ -151,7 +173,7 @@ namespace Artemis12
             Random random = new Random();
             //number of power types
             int randomType = random.Next(1, 6);
-            randomType = 5;
+            //randomType = 5;
             if (randomType == 1)
             {
                 PaddleGrow power = new PaddleGrow(random.Next(0, pnlGame.Width - 40), random.Next(0, pnlGame.Height - 40));
@@ -183,10 +205,53 @@ namespace Artemis12
             power.Execute(leftPaddle, rightPaddle, mainBall, this);
         }
 
-        public void Loss(bool isLeft)
+        public void BallOut(Ball ball)
         {
-            Console.WriteLine("lose!");
-            tmrMovement.Enabled = false;
+            balls.Remove(ball);
+            if (balls.Count == 0)
+            {
+                tmrMovement.Enabled = false;
+                //restart form
+                tmrMovement.Enabled = false;
+                tmrPowers.Enabled = false;
+                btnStart.Visible = true;
+                btnStart.Enabled = true;
+                btnHelp.Visible = true;
+                btnHelp.Enabled = true;
+                btnStory.Visible = true;
+                btnStory.Enabled = true;
+                btnBack.Enabled = true;
+
+                //picBackground.Visible = false;
+                //picBackground.SendToBack();
+
+                tmrSeconds.Enabled = false;
+                lblScore.Visible = false;
+
+                //GAME OVER SCREEN
+                picGameOver.Visible = true;
+                picGameOver.BringToFront();
+                btnStart.BringToFront();
+                btnHelp.BringToFront();
+                btnStory.BringToFront();
+                lblScore.BringToFront();
+
+                //HOME SCREEN START
+                leftPaddle = new Paddle(0, 0);
+                rightPaddle = new Paddle(650, 0);
+                mainBall = new Ball(352, 255);
+                picHelp.Visible = false;
+                picStory.Visible = false;
+                picBackground.Visible = false;
+                btnBack.Visible = false;
+
+
+                //SCORE
+                tmrSeconds.Enabled = false;
+                lblScore.Visible = true;
+                lblScore.Top -= 100;
+;            }
+
         }
 
         private void tmrPowers_Tick(object sender, EventArgs e)
@@ -201,6 +266,33 @@ namespace Artemis12
             balls.Add(newBall);
         }
 
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            picHelp.BringToFront();
+            picHelp.Visible = true;
+            btnBack.Visible = true;
+            btnBack.Enabled = true;
+            btnBack.BringToFront();
+        }
+        private void btnStory_Click(object sender, EventArgs e)
+        {
+            picStory.BringToFront();
+            picStory.Visible = true;
+            btnBack.Visible = true;
+            btnBack.Enabled = true;
+            btnBack.BringToFront();
+        }
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            picHelp.Visible = false;
+            picStory.Visible = false;
+            btnBack.Visible = false;
+        }
 
+        private void tmrSeconds_Tick(object sender, EventArgs e)
+        {
+            score++;
+            lblScore.Text = "SCORE: " + score.ToString();
+        }
     }
 }

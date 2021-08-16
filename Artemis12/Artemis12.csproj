@@ -102,5 +102,26 @@
   <ItemGroup>
     <None Include="Resources\BallGrow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArtemisHome.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArtemisHelp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArtemisStory.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArtemisHelp1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArtemisBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArtemisGameOver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArtemisGameOver1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

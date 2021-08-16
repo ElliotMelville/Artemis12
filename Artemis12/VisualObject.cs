@@ -225,12 +225,7 @@ namespace Artemis12
             }
             else if (newX <= 0)
             {
-                balls.Remove(this);
-                if(balls.Count == 0)
-                {
-                    //tell the main form that the game has been lost, and stop the ball from moving
-                    mainForm.Loss(true);
-                }
+                mainForm.BallOut(this);
             }
 
             return newX;
@@ -251,9 +246,7 @@ namespace Artemis12
             }
             else if (newX >= mainForm.Width - width)
             {
-                //tell the main form that the game has been lost, and stop the ball from moving
-                mainForm.Loss(false);
-                speed = 0;
+                mainForm.BallOut(this);
             }
 
             return newX;
